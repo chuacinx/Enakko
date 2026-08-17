@@ -6,6 +6,12 @@
 
 <title>Ayam Guling Enakko</title>
 
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23d71920'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle'%3E%F0%9F%90%94%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Lobster&display=swap" rel="stylesheet">
+
 <style>
 * {
   box-sizing: border-box;
@@ -50,6 +56,82 @@ body {
   object-fit: cover;
   object-position: center;
   display: block;
+}
+
+.banner-placeholder {
+  background: #d71920;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.banner-stripe {
+  height: 24px;
+  background: #ffc72c;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.banner-stripe::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  background: #d71920;
+}
+
+.banner-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-plate {
+  border: 3px solid #fff;
+  border-radius: 60px;
+  padding: 10px 30px 16px;
+  text-align: center;
+}
+
+.logo-sub {
+  display: block;
+  font-family: "Caveat", cursive;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: -8px;
+}
+
+.logo-main {
+  display: block;
+  font-family: "Lobster", cursive;
+  font-size: 36px;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.logo-emblem {
+  width: 46px;
+  height: 46px;
+  margin-top: -14px;
+  border-radius: 50%;
+  background: #ffc72c;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .2);
 }
 
 /* =========================
@@ -168,6 +250,7 @@ body {
   padding: 11px 13px;
   border-radius: 10px;
   background: #29251f;
+  border-top: 3px solid #ffc72c;
   color: white;
   display: flex;
   align-items: center;
@@ -276,6 +359,7 @@ body {
 
 .sale-total {
   background: #29251f;
+  border-top: 3px solid #ffc72c;
   color: white;
   padding: 15px 17px;
   display: flex;
@@ -388,12 +472,24 @@ body {
        BANNER ENAKKO
   ========================== -->
 
-  <div class="banner">
+  <div class="banner banner-placeholder">
 
-    <img
-      src="1000360073.jpg"
-      alt="Ayam Guling Enakko"
-    >
+    <div class="banner-stripe"></div>
+
+    <div class="banner-body">
+
+      <div class="logo-badge">
+
+        <div class="logo-plate">
+          <span class="logo-sub">Ayam Guling</span>
+          <span class="logo-main">enakko</span>
+        </div>
+
+        <div class="logo-emblem" role="img" aria-label="Ayam Guling Enakko">🐔</div>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -1126,6 +1222,30 @@ function loadStock() {
       document.getElementById(
         "keluar"
       ).value = 0;
+
+
+      hitungStock();
+
+    }
+
+    else {
+
+      document.getElementById(
+        "stokAwal"
+      ).value =
+        Number(hasil.stokAwal || 0);
+
+
+      document.getElementById(
+        "masuk"
+      ).value =
+        Number(hasil.masuk || 0);
+
+
+      document.getElementById(
+        "keluar"
+      ).value =
+        Number(hasil.keluar || 0);
 
 
       hitungStock();
