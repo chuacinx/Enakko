@@ -458,60 +458,60 @@ body {
   font-size: 12px;
 }
 
-.riwayat-item {
-  padding: 13px 17px;
-  border-bottom: 1px solid #f0e9df;
+.riwayat-table-wrap {
+  padding: 2px 12px 14px;
+  overflow-x: auto;
 }
 
-.riwayat-item:last-child {
+.riwayat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.riwayat-table thead th {
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  color: #9a8f7d;
+  font-weight: 700;
+  padding: 6px 3px;
+  text-align: center;
+  border-bottom: 1px solid #eee9df;
+  white-space: nowrap;
+}
+
+.riwayat-table thead th:first-child {
+  text-align: left;
+}
+
+.riwayat-table tbody td {
+  padding: 8px 3px;
+  text-align: center;
+  font-family: monospace;
+  font-weight: 600;
+  font-size: 11px;
+  border-bottom: 1px solid #f4efe6;
+  white-space: nowrap;
+}
+
+.riwayat-table tbody td:first-child {
+  text-align: left;
+  font-family: -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.riwayat-table tbody tr:last-child td {
   border-bottom: none;
 }
 
-.riwayat-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.riwayat-date {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.riwayat-badge {
-  font-size: 9px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 20px;
-}
-
-.riwayat-badge.ayam {
-  background: #ffe6e2;
-  color: #d71920;
-}
-
-.riwayat-badge.beras {
-  background: #e6f0e8;
-  color: #2f7a3e;
-}
-
-.riwayat-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.riwayat-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: #6b6152;
-}
-
-.riwayat-row b {
-  color: #29251f;
-  font-family: monospace;
+.riwayat-del-btn {
+  border: none;
+  background: transparent;
+  color: #c98f8f;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 5px;
 }
 
 .riwayat-del {
@@ -560,7 +560,7 @@ body {
 <div class="app">
 
   <div class="banner">
-    <img src="IMG-20260819-WA0004.jpg" alt="Ayam Guling Enakko">
+    <img src="ead401b9-7d28-45a7-9365-b2063f457d06_gobiz-dashboard-image_1745894990069.jpg" alt="Ayam Guling Enakko">
   </div>
 
 
@@ -803,17 +803,36 @@ body {
   <div id="page-riwayat" class="page">
 
     <div class="card">
-
       <div class="card-head">
-        <div class="icon">📋</div>
+        <div class="icon">🐔</div>
         <div>
-          <h2>Riwayat Stock</h2>
-          <span>Riwayat aktif dari data yang disimpan</span>
+          <h2>Riwayat Ayam</h2>
+          <span>Tgl · Awal · Masuk · Keluar · Akhir (ekor)</span>
         </div>
       </div>
+      <div id="riwayatAyam" class="riwayat-table-wrap"></div>
+    </div>
 
-      <div id="riwayatList"></div>
+    <div class="card">
+      <div class="card-head">
+        <div class="icon">⚪</div>
+        <div>
+          <h2>Riwayat Beras Putih</h2>
+          <span>Tgl · Awal · Masuk · Keluar · Akhir (kg)</span>
+        </div>
+      </div>
+      <div id="riwayatPutih" class="riwayat-table-wrap"></div>
+    </div>
 
+    <div class="card">
+      <div class="card-head">
+        <div class="icon">🟤</div>
+        <div>
+          <h2>Riwayat Beras Basmati</h2>
+          <span>Tgl · Awal · Masuk · Keluar · Akhir (kg)</span>
+        </div>
+      </div>
+      <div id="riwayatBasmati" class="riwayat-table-wrap"></div>
     </div>
 
     <button class="riwayat-clear" onclick="hapusSemuaRiwayat()">Hapus Semua Riwayat</button>
@@ -1200,57 +1219,83 @@ function resetBeras() {
    RENDER RIWAYAT
 ========================= */
 
-function formatTanggalRiwayat(iso) {
-  var hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+function formatTanggalSingkat(iso) {
   var bulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
   var d = new Date(iso);
-  return hari[d.getDay()] + ", " + d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
+  return d.getDate() + " " + bulan[d.getMonth()];
+}
+
+function renderTabelRiwayat(containerId, rows, satuan) {
+  var wrap = document.getElementById(containerId);
+
+  if (rows.length === 0) {
+    wrap.innerHTML = '<div class="riwayat-empty">Belum ada data.</div>';
+    return;
+  }
+
+  var html =
+    '<table class="riwayat-table"><thead><tr>' +
+      '<th>Tgl</th><th>Awal</th><th>Masuk</th><th>Keluar</th><th>Akhir</th><th></th>' +
+    '</tr></thead><tbody>';
+
+  rows.forEach(function(r) {
+    html +=
+      '<tr>' +
+        '<td>' + formatTanggalSingkat(r.tgl) + '</td>' +
+        '<td>' + format(r.awal) + '</td>' +
+        '<td>' + format(r.masuk) + '</td>' +
+        '<td>' + format(r.keluar) + '</td>' +
+        '<td>' + format(r.akhir) + '</td>' +
+        '<td><button class="riwayat-del-btn" onclick="hapusRiwayat(' + r.i + ')">✕</button></td>' +
+      '</tr>';
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
 }
 
 function renderRiwayat() {
   var list = ambilRiwayat();
-  var wrap = document.getElementById("riwayatList");
 
-  if (list.length === 0) {
-    wrap.innerHTML = '<div class="riwayat-empty">Belum ada riwayat stock yang disimpan.</div>';
-    return;
-  }
-
-  var html = "";
+  var ayamRows = [];
+  var putihRows = [];
+  var basmatiRows = [];
 
   list.forEach(function(item, i) {
-    var badgeClass = item.jenis === "ayam" ? "ayam" : "beras";
-    var badgeText = item.jenis === "ayam" ? "AYAM" : "BERAS";
-    var rows = "";
-
     if (item.jenis === "ayam") {
       var d = item.data;
-      rows =
-        '<div class="riwayat-row"><span>Stok Awal</span><b>' + format(d.stokAwal) + ' ekor</b></div>' +
-        '<div class="riwayat-row"><span>Masuk</span><b>' + format(d.masuk) + ' ekor</b></div>' +
-        '<div class="riwayat-row"><span>Stok Akhir</span><b>' + format(d.stokAkhir) + ' ekor</b></div>' +
-        '<div class="riwayat-row"><span>Terpakai</span><b>' + format(d.terpakai) + ' ekor</b></div>';
-    } else {
+      ayamRows.push({
+        i: i,
+        tgl: item.tanggal,
+        awal: d.stokAwal,
+        masuk: d.masuk,
+        keluar: d.terpakai,
+        akhir: d.stokAkhir
+      });
+    } else if (item.jenis === "beras") {
       var d2 = item.data;
-      rows =
-        '<div class="riwayat-row"><span>Putih: Awal / Masuk / Keluar</span><b>' + format(d2.putihAwal) + ' / ' + format(d2.putihMasuk) + ' / ' + format(d2.putihKeluar) + '</b></div>' +
-        '<div class="riwayat-row"><span>Putih Stok Akhir</span><b>' + format(d2.putihAkhir) + ' kg</b></div>' +
-        '<div class="riwayat-row"><span>Basmati: Awal / Masuk / Keluar</span><b>' + format(d2.basmatiAwal) + ' / ' + format(d2.basmatiMasuk) + ' / ' + format(d2.basmatiKeluar) + '</b></div>' +
-        '<div class="riwayat-row"><span>Basmati Stok Akhir</span><b>' + format(d2.basmatiAkhir) + ' kg</b></div>';
+      putihRows.push({
+        i: i,
+        tgl: item.tanggal,
+        awal: d2.putihAwal,
+        masuk: d2.putihMasuk,
+        keluar: d2.putihKeluar,
+        akhir: d2.putihAkhir
+      });
+      basmatiRows.push({
+        i: i,
+        tgl: item.tanggal,
+        awal: d2.basmatiAwal,
+        masuk: d2.basmatiMasuk,
+        keluar: d2.basmatiKeluar,
+        akhir: d2.basmatiAkhir
+      });
     }
-
-    html +=
-      '<div class="riwayat-item">' +
-        '<div class="riwayat-top">' +
-          '<div class="riwayat-date">' + formatTanggalRiwayat(item.tanggal) + '</div>' +
-          '<div class="riwayat-badge ' + badgeClass + '">' + badgeText + '</div>' +
-        '</div>' +
-        '<div class="riwayat-rows">' + rows + '</div>' +
-        '<button class="riwayat-del" onclick="hapusRiwayat(' + i + ')">Hapus entri ini</button>' +
-      '</div>';
   });
 
-  wrap.innerHTML = html;
+  renderTabelRiwayat("riwayatAyam", ayamRows);
+  renderTabelRiwayat("riwayatPutih", putihRows);
+  renderTabelRiwayat("riwayatBasmati", basmatiRows);
 }
 
 function hapusRiwayat(index) {
@@ -1296,24 +1341,30 @@ document.querySelectorAll("input").forEach(function(input) {
     } else if (
       input.id === "putihAwal" ||
       input.id === "putihMasuk" ||
-      input.id === "putihKeluar"
-    ) {
-      putihDariKeluar();
-    } else if (input.id === "putihAkhir") {
-      putihDariAkhir();
-    } else if (
+      input.id === "putihKeluar" ||
+      input.id === "putihAkhir" ||
       input.id === "basmatiAwal" ||
       input.id === "basmatiMasuk" ||
-      input.id === "basmatiKeluar"
+      input.id === "basmatiKeluar" ||
+      input.id === "basmatiAkhir"
     ) {
-      basmatiDariKeluar();
-    } else if (input.id === "basmatiAkhir") {
-      basmatiDariAkhir();
+      // beras dihitung ulang saat blur (lihat listener 'change' di bawah),
+      // supaya ketikan multi-digit tidak diinterupsi tiap huruf
     } else {
       hitungPenjualan();
     }
   });
 });
+
+document.getElementById("putihAwal").addEventListener("change", putihDariKeluar);
+document.getElementById("putihMasuk").addEventListener("change", putihDariKeluar);
+document.getElementById("putihKeluar").addEventListener("change", putihDariKeluar);
+document.getElementById("putihAkhir").addEventListener("change", putihDariAkhir);
+
+document.getElementById("basmatiAwal").addEventListener("change", basmatiDariKeluar);
+document.getElementById("basmatiMasuk").addEventListener("change", basmatiDariKeluar);
+document.getElementById("basmatiKeluar").addEventListener("change", basmatiDariKeluar);
+document.getElementById("basmatiAkhir").addEventListener("change", basmatiDariAkhir);
 
 
 /* =========================
