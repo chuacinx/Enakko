@@ -376,12 +376,444 @@ body {
 .footer b {
   color: #d71920;
 }
+/* =========================
+   MENU TIGA TITIK
+========================= */
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 3px;
+}
+
+.menu-button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #eadfd1;
+  border-radius: 12px;
+  background: #fff;
+  color: #29251f;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 30px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(55,45,30,.08);
+}
+
+/* layar gelap */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 9999;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: opacity .25s ease;
+}
+
+/* aktif */
+.menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* panel */
+.side-menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: min(88%, 390px);
+  height: 100%;
+
+  background: #fff;
+
+  overflow-y: auto;
+
+  transform: translateX(100%);
+  transition: transform .28s ease;
+
+  box-shadow: -8px 0 25px rgba(0,0,0,.18);
+}
+
+.menu-overlay.active .side-menu {
+  transform: translateX(0);
+}
+
+
+/* HEADER MENU */
+
+.menu-header {
+  padding: 24px 20px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #eee9df;
+}
+
+.menu-title {
+  color: #d71920;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.menu-subtitle {
+  margin-top: 3px;
+  color: #999;
+  font-size: 10px;
+}
+
+.menu-close {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f5f1e8;
+
+  font-size: 23px;
+  color: #555;
+
+  cursor: pointer;
+}
+
+
+/* SECTION */
+
+.menu-section {
+  padding: 18px 18px 5px;
+}
+
+.menu-section-title {
+  margin-bottom: 7px;
+
+  color: #999;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .8px;
+}
+
+
+/* ITEM */
+
+.menu-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 10px 5px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: white;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.menu-item:active {
+  background: #f5f1e8;
+}
+
+.menu-icon {
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #fff0cf;
+
+  font-size: 18px;
+}
+
+.menu-item-text {
+  flex: 1;
+}
+
+.menu-item-title {
+  color: #29251f;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.menu-item-desc {
+  margin-top: 2px;
+  color: #999;
+  font-size: 9px;
+}
+
+.menu-arrow {
+  color: #bbb;
+  font-size: 20px;
+}
 </style>
 </head>
 
 <body>
+<!-- =========================
+     MENU TIGA TITIK
+========================= -->
 
+<div id="menuOverlay" class="menu-overlay">
+
+  <div class="side-menu">
+
+    <div class="menu-header">
+
+      <div>
+        <div class="menu-title">
+          Enakko
+        </div>
+
+        <div class="menu-subtitle">
+          Sistem pencatatan usaha
+        </div>
+      </div>
+
+      <button
+        class="menu-close"
+        onclick="tutupMenu()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <!-- OPERASIONAL -->
+
+    <div class="menu-section">
+
+      <div class="menu-section-title">
+        OPERASIONAL
+      </div>
+
+
+      <button class="menu-item"
+        onclick="keBagian('stock')">
+
+        <div class="menu-icon">
+          🐔
+        </div>
+
+        <div class="menu-item-text">
+
+          <div class="menu-item-title">
+            Stock Ayam
+          </div>
+
+          <div class="menu-item-desc">
+            Kelola stok ayam
+          </div>
+
+        </div>
+
+        <div class="menu-arrow">
+          ›
+        </div>
+
+      </button>
+
+
+      <button class="menu-item"
+        onclick="keBagian('penjualan')">
+
+        <div class="menu-icon">
+          🧮
+        </div>
+
+        <div class="menu-item-text">
+
+          <div class="menu-item-title">
+            Penjualan
+          </div>
+
+          <div class="menu-item-desc">
+            Catat ayam terjual
+          </div>
+
+        </div>
+
+        <div class="menu-arrow">
+          ›
+        </div>
+
+      </button>
+
+
+      <button class="menu-item"
+        onclick="keBagian('penusukan')">
+
+        <div class="menu-icon">
+          🔪
+        </div>
+
+        <div class="menu-item-text">
+
+          <div class="menu-item-title">
+            Penusukan
+          </div>
+
+          <div class="menu-item-desc">
+            Catat ayam yang ditusuk
+          </div>
+
+        </div>
+
+        <div class="menu-arrow">
+          ›
+        </div>
+
+      </button>
+
+    </div>
+
+
+    <!-- LAPORAN -->
+
+    <div class="menu-section">
+
+      <div class="menu-section-title">
+        LAPORAN
+      </div>
+
+
+      <button class="menu-item"
+        onclick="menuBelumAda('Riwayat Harian')">
+
+        <div class="menu-icon">
+          📅
+        </div>
+
+        <div class="menu-item-text">
+
+          <div class="menu-item-title">
+            Riwayat Harian
+          </div>
+
+          <div class="menu-item-desc">
+            Lihat catatan sebelumnya
+          </div>
+
+        </div>
+
+        <div class="menu-arrow">
+          ›
+        </div>
+
+      </button>
+
+
+      <button class="menu-item"
+        onclick="menuBelumAda('Grafik Penjualan')">
+
+        <div class="menu-icon">
+          📈
+        </div>
+
+        <div class="menu-item-text">
+
+          <div class="menu-item-title">
+            Grafik Penjualan
+          </div>
+
+          <div class="menu-item-desc">
+            Performa penjualan
+          </div>
+
+        </div>
+
+        <div class="menu-arrow">
+          ›
+        </div>
+
+      </button>
+
+    </div>
+
+
+    <!-- DATA -->
+
+    <div class="menu-section">
+
+      <div class="menu-section-title">
+        DATA
+      </div>
+
+
+      <button class="menu-item"
+        onclick="menuBelumAda('Backup Data')">
+
+        <div class="menu-icon">
+          💾
+        </div>
+
+        <div class="menu-item-text">
+
+          <div class="menu-item-title">
+            Backup Data
+          </div>
+
+          <div class="menu-item-desc">
+            Simpan data Enakko
+          </div>
+
+        </div>
+
+        <div class="menu-arrow">
+          ›
+        </div>
+
+      </button>
+
+
+      <button class="menu-item"
+        onclick="menuBelumAda('Pengaturan')">
+
+        <div class="menu-icon">
+          ⚙️
+        </div>
+
+        <div class="menu-item-text">
+
+          <div class="menu-item-title">
+            Pengaturan
+          </div>
+
+          <div class="menu-item-desc">
+            Atur aplikasi
+          </div>
+
+        </div>
+
+        <div class="menu-arrow">
+          ›
+        </div>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+  
 <div class="app">
 
   <!-- =========================
@@ -402,13 +834,19 @@ body {
 
   <div class="header">
 
+  <div>
     <h1>Ayam Guling Enakko</h1>
 
     <p id="tanggal">
       Memuat tanggal...
     </p>
-
   </div>
+
+  <button class="menu-button" onclick="bukaMenu()">
+    ⋮
+  </button>
+
+</div>
 
 
   <!-- =========================
@@ -549,7 +987,7 @@ body {
       class="save-status"
     ></div>
 
-  </div>
+  </div
 
 
 
@@ -845,26 +1283,6 @@ function format(n) {
    STOCK
 ========================= */
 
-function hitungStock() {
-
-  var awal =
-    angka("stokAwal");
-
-  var masuk =
-    angka("masuk");
-
-  var keluar =
-    angka("keluar");
-
-  var total =
-    awal + masuk - keluar;
-
-  document.getElementById(
-    "stokFisik"
-  ).textContent =
-    format(total) + " ekor";
-
-}
 
 
 /* =========================
@@ -1265,7 +1683,101 @@ loadStock();
 hitungStock();
 
 hitungPenjualan();
+/* =========================
+   MENU
+========================= */
 
+function bukaMenu() {
+
+  document
+    .getElementById("menuOverlay")
+    .classList.add("active");
+
+}
+
+
+function tutupMenu() {
+
+  document
+    .getElementById("menuOverlay")
+    .classList.remove("active");
+
+}
+
+
+/* Klik area gelap untuk tutup */
+
+document
+  .getElementById("menuOverlay")
+  .addEventListener("click", function(event) {
+
+    if (event.target === this) {
+      tutupMenu();
+    }
+
+  });
+
+
+/* =========================
+   PINDAH KE BAGIAN
+========================= */
+
+function keBagian(bagian) {
+
+  tutupMenu();
+
+  if (bagian === "stock") {
+
+    document
+      .querySelector(".card")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+
+  }
+
+
+  if (bagian === "penjualan") {
+
+    var cards =
+      document.querySelectorAll(".card");
+
+    if (cards[1]) {
+
+      cards[1].scrollIntoView({
+        behavior: "smooth"
+      });
+
+    }
+
+  }
+
+
+  if (bagian === "penusukan") {
+
+    document
+      .getElementById("penusukan")
+      .focus();
+
+  }
+
+}
+
+
+/* =========================
+   FITUR YANG BELUM DIBUAT
+========================= */
+
+function menuBelumAda(nama) {
+
+  tutupMenu();
+
+  alert(
+    nama +
+    " belum dibuat.\n\nNanti kita bikin fiturnya."
+  );
+
+}
 </script>
 
 </body>
